@@ -15,9 +15,11 @@ model User {
   email String
   username String @unique
   p_hash String
+  refresh_token String?
   role Role @default(USER)
   images Image[]
   comments Comment[]
+  created_at DateTime
 }
 
 model Image {
