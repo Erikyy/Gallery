@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "be"
+		},
+		{
+			"path": "db"
 		}
 	],
 	"settings": {}
