@@ -1,0 +1,51 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Comment {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Image {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+type Query {
+  comments: [Comment!]!
+  comment(id: Int!): Comment!
+  images: [Image!]!
+  image(id: Int!): Image!
+}
+
+type Mutation {
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(updateCommentInput: UpdateCommentInput!): Comment!
+  removeComment(id: Int!): Comment!
+  createImage(createImageInput: CreateImageInput!): Image!
+  updateImage(updateImageInput: UpdateImageInput!): Image!
+  removeImage(id: Int!): Image!
+}
+
+input CreateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateCommentInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
+
+input CreateImageInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateImageInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
+}
