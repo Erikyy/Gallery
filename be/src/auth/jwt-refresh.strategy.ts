@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { AuthUserDto } from './dto/auth.user.dto';
 import { Request } from 'express';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
   Strategy,
-  'jwt-refresh-token',
+  'jwt-refresh',
 ) {
   constructor() {
     super({
@@ -16,7 +15,9 @@ export class JwtRefreshStrategy extends PassportStrategy(
       passReqToCallback: true,
     });
   }
-  async validate(req: Request, payload: AuthUserDto) {
+  async validate(req: Request, payload: any): Promise<any> {
+    console.log(req);
+
     const refresh_token = req.get('authorization').replace('Bearer', '').trim();
     return { ...payload, refresh_token };
   }

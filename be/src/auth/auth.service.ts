@@ -102,5 +102,26 @@ export class AuthService {
     );
   }
 
-  async refreshTokens() {}
+  async refreshTokens(
+    userId: string,
+    refresh_token: string,
+  ): Promise<TokensDto> {
+    const user = await this.userService.findOne({ id: userId });
+    if (!user) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    const refreshTokenMatch = await bcrypt.compare(
+      refresh_token,
+      user.refresh_token,
+    );
+
+    if (!refreshTokenMatch) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    const tokens = await this.genTokens(user.id, user.username);
+    await this.updateRefreshToken(user.id, tokens.refresh_token);
+    return tokens;
+  }
 }

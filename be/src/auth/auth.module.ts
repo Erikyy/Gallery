@@ -11,20 +11,12 @@ import { UsersService } from 'src/users/users.service';
 
 @Module({
   imports: [
-    PassportModule,
     UsersModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '120s' },
     }),
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService,
-    JwtStrategy,
-    LocalStrategy,
-    JwtRefreshStrategy,
-    UsersService,
-  ],
+  providers: [AuthService, JwtStrategy, JwtRefreshStrategy, UsersService],
 })
 export class AuthModule {}
