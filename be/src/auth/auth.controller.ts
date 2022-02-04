@@ -1,5 +1,14 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthLoginDto } from './dto/auth.login.dto';
 import { AuthSignupDto } from './dto/auth.signup.dto';
 import { TokensDto } from './dto/token.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -10,27 +19,29 @@ import { LocalAuthGuard } from './local.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(LocalAuthGuard)
-  @Post('/login')
-  async login(@Request() req) {
-    await this.authService.login();
-    return req.user;
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body() req: AuthLoginDto): Promise<TokensDto> {
+    return await this.authService.login(req);
   }
 
-  @Post('/signup')
+  @Post('signup')
+  @HttpCode(HttpStatus.CREATED)
   async signup(@Body() req: AuthSignupDto): Promise<TokensDto> {
     return await this.authService.signup(req);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('/logout')
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
   async logout() {
-    await this.authService.logout();
+    return await this.authService.logout('');
   }
 
   @UseGuards(JwtRefreshTokenGuard)
-  @Post('/validate')
+  @Post('validate')
+  @HttpCode(HttpStatus.OK)
   async refreshToken(@Body() req) {
-    await this.authService.refreshTokens();
+    return await this.authService.refreshTokens();
   }
 }

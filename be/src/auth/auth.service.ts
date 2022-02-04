@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -13,6 +14,7 @@ import { Prisma, User } from '@prisma/client';
 import { AuthUserDto } from './dto/auth.user.dto';
 import { AuthSignupDto } from './dto/auth.signup.dto';
 import { TokensDto } from './dto/token.dto';
+import { AuthLoginDto } from './dto/auth.login.dto';
 
 @Injectable()
 export class AuthService {
@@ -20,14 +22,6 @@ export class AuthService {
     private jwtService: JwtService,
     private userService: UsersService,
   ) {}
-
-  private async genAccessToken(payload: AuthUserDto) {
-    return this.jwtService.signAsync(payload);
-  }
-
-  private async genRefreshToken(payload: AuthPayloadDto) {
-    return this.jwtService.signAsync(payload);
-  }
 
   private async genTokens(
     userId: string,
@@ -54,27 +48,59 @@ export class AuthService {
       },
     );
     return {
-      access_token: '',
-      refresh_token: '',
+      access_token,
+      refresh_token,
     };
   }
 
-  async login() {}
-  async logout() {}
+  async login(login: AuthLoginDto): Promise<TokensDto> {
+    const user = await this.userService.findOne({ username: login.username });
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    const authenticated = await bcrypt.compare(login.password, user.p_hash);
+    if (!authenticated) {
+      throw new ForbiddenException('Access denied');
+    }
+    const tokens = await this.genTokens(user.id, user.username);
+    await this.updateRefreshToken(user.id, tokens.refresh_token);
+    return tokens;
+  }
+
+  async logout(userId: string) {
+    await this.userService.update(
+      { id: userId },
+      {
+        refresh_token: null,
+      },
+    );
+  }
+
   async signup(authDto: AuthSignupDto): Promise<TokensDto> {
     const hashedPassword = await bcrypt.hash(authDto.password, 10);
     const currentDate = new Date();
-    const newUser = this.userService.create({
+    const newUser = await this.userService.create({
       p_hash: hashedPassword,
       email: authDto.email,
       username: authDto.username,
       created_at: currentDate,
     });
 
-    return {
-      access_token: '',
-      refresh_token: '',
-    };
+    const tokens = await this.genTokens(newUser.id, newUser.username);
+    await this.updateRefreshToken(newUser.id, tokens.refresh_token);
+    return tokens;
   }
+
+  async updateRefreshToken(userId: string, refresh_token: string) {
+    const hash = await bcrypt.hash(refresh_token, 10);
+    this.userService.update(
+      { id: userId },
+      {
+        refresh_token: hash,
+      },
+    );
+  }
+
   async refreshTokens() {}
 }
