@@ -13,6 +13,7 @@ import { Public } from 'src/common/public.decorator';
 import { AuthService } from './auth.service';
 import { AuthLoginDto } from './dto/auth.login.dto';
 import { AuthSignupDto } from './dto/auth.signup.dto';
+import { RefreshBodyDto } from './dto/refresh.dto';
 import { TokensDto } from './dto/token.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { JwtRefreshTokenGuard } from './jwt-refresh.guard';
@@ -44,15 +45,9 @@ export class AuthController {
   }
 
   @Public()
-  @UseGuards(JwtRefreshTokenGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refreshToken(@Request() req: any) {
-    console.log(req);
-
-    const user = req.user;
-    console.log(user);
-
-    return await this.authService.refreshTokens(user.sub, user.refresh_token);
+  async refreshToken(@Body() req: RefreshBodyDto) {
+    return await this.authService.refreshTokens(req.refresh_token);
   }
 }

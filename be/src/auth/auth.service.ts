@@ -102,11 +102,10 @@ export class AuthService {
     );
   }
 
-  async refreshTokens(
-    userId: string,
-    refresh_token: string,
-  ): Promise<TokensDto> {
-    const user = await this.userService.findOne({ id: userId });
+  async refreshTokens(refresh_token: string): Promise<TokensDto> {
+    const decoded = await this.jwtService.decode(refresh_token);
+
+    const user = await this.userService.findOne({ id: decoded.sub });
     if (!user) {
       throw new ForbiddenException('Access denied');
     }
