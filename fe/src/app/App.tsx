@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Login } from '../features/Login/Login';
+import Header from '../common/components/Header';
+import { Login } from '../pages/Login';
 import AuthProvider from '../utils/auth';
 import './App.css';
 
@@ -8,9 +9,7 @@ const App: FC = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <div>
-          <h1>hello</h1>
-        </div>
+        <Header />
         <Routes>
           <Route path="/login" element={<Login />} />
         </Routes>
