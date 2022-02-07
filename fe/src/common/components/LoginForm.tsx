@@ -20,7 +20,7 @@ const LoginForm: FC<LoginFormProps> = ({ onSubmit }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="shadow-lg bg-slate-50 p-6 rounded-xl xl:w-1/5 lg:w-2/5 md:w-3/5 sm:w-4/5 transition-width ease delay-300"
+      className="shadow-lg bg-slate-50 dark:bg-neutral-800 flex flex-col justify-center w-full h-full sm:h-auto p-6 sm:rounded-xl xl:w-1/5 lg:w-2/5 md:w-3/5 sm:w-5/6 transition-all ease-in-out duration-300"
     >
       <div className="flex flex-col space-y-4 w-full items-center">
         <h1 className="text-4xl p-4">Login</h1>
