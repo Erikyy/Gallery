@@ -40,6 +40,12 @@ model Comment {
   imageId String?
 }
 
+model Post {
+  id String @unique @id @default(uuid())
+  title String
+  content String
+}
+
 enum Role {
   USER
   ADMIN

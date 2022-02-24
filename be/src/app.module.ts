@@ -8,6 +8,7 @@ import { CommentsModule } from './comments/comments.module';
 import { ImagesModule } from './images/images.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { PostsModule } from './posts/posts.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     UsersModule,
     CommentsModule,
     ImagesModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [

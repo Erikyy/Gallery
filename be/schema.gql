@@ -12,11 +12,37 @@ type Image {
   exampleField: Int!
 }
 
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type PostDto {
+  id: String!
+  title: String!
+  content: String!
+}
+
+type PostDtoEdge {
+  cursor: String!
+  node: PostDto!
+}
+
+type PostConnection {
+  edges: [PostDtoEdge!]
+  nodes: [PostDto!]
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
 type Query {
   comments: [Comment!]!
   comment(id: Int!): Comment!
   images: [Image!]!
   image(id: Int!): Image!
+  posts: PostConnection!
 }
 
 type Mutation {
@@ -26,6 +52,7 @@ type Mutation {
   createImage(createImageInput: CreateImageInput!): Image!
   updateImage(updateImageInput: UpdateImageInput!): Image!
   removeImage(id: Int!): Image!
+  createPost(createPostInput: CreatePostInput!): PostDto!
 }
 
 input CreateCommentInput {
@@ -48,4 +75,9 @@ input UpdateImageInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!
+}
+
+input CreatePostInput {
+  title: String!
+  content: String!
 }
