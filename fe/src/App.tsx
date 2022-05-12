@@ -1,4 +1,5 @@
 import React, { FC, useEffect } from 'react';
+import { Header } from './components/Header';
 import { useLogin } from './utils/Api';
 
 const App: FC = () => {
@@ -7,7 +8,9 @@ const App: FC = () => {
     login('erik', 'Maastik900');
   }, []);
   return (
-    <div className="border border-gray-50 rounded-xl p-20 shadow-xl"></div>
+    <div className="">
+      <Header />
+    </div>
   );
 };
 
