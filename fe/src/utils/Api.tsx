@@ -1,5 +1,6 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router';
 
 const api_url = 'http://localhost:8000';
 
@@ -101,4 +102,16 @@ const useLogout = () => {
   );
 
   return {};
+};
+
+export const RequireAuth: FC = ({ children }) => {
+  const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies([
+    'access_token',
+    'refresh_token'
+  ]);
+  if (!cookies.access_token && !cookies.refresh_token) {
+    navigate('/login');
+  }
+  return <>{children}</>;
 };
