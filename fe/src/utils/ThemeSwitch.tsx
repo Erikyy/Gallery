@@ -24,29 +24,34 @@ export const ThemeSwitch: FC = () => {
   }
 
   return (
-    <div
-      onClick={toggle}
-      className={`flex-start flex h-[30px] w-[60px] rounded-[50px] bg-zinc-100 p-[5px] shadow-inner hover:cursor-pointer dark:bg-zinc-700 ${
-        isOn && 'place-content-end'
-      }`}
-    >
-      <motion.div
-        className="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-black/90"
-        layout
-        transition={{
-          type: 'spring',
-          damping: 15,
-          stiffness: 100
-        }}
+    <div className="flex flex-row align-middle">
+      <div
+        onClick={toggle}
+        className={`flex-start flex h-[30px] w-[60px] rounded-[50px] bg-zinc-100 p-[5px] shadow-inner hover:cursor-pointer dark:bg-zinc-700 ${
+          isOn && 'place-content-end'
+        }`}
       >
-        <div>
-          {isOn ? (
-            <MdLightMode className="text-slate-200" />
-          ) : (
-            <MdDarkMode className="text-slate-200" />
-          )}
-        </div>
-      </motion.div>
+        <motion.div
+          className="flex h-[20px] w-[20px] items-center justify-center rounded-full bg-black/90"
+          layout
+          transition={{
+            type: 'spring',
+            damping: 15,
+            stiffness: 100
+          }}
+        >
+          <div>
+            {isOn ? (
+              <MdLightMode className="text-slate-200" />
+            ) : (
+              <MdDarkMode className="text-slate-200" />
+            )}
+          </div>
+        </motion.div>
+      </div>
+      <span className=" p-1 text-center">
+        {isOn ? 'Light Mode' : 'Dark Mode'}
+      </span>
     </div>
   );
 };
