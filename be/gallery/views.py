@@ -6,6 +6,15 @@ from gallery.models import Post, Profile, User
 from gallery.serializers import PostSerializer, ProfileSerializer, UserSerializer
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
+from djoser.signals import user_registered
+from django.dispatch import receiver
+
+@receiver(user_registered)
+def create_user_profile(user, request, **kwargs):
+    new_profile =  Profile()
+    new_profile.user = user
+    new_profile.save()
+
 
 @csrf_exempt
 @api_view(['GET'])
