@@ -1,5 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { MdHome, MdLogout, MdMenu, MdSettings } from 'react-icons/md';
+import { useNavigate } from 'react-router';
+import { useAuth, useLogout } from '../../utils/Api';
 import { ThemeSwitch } from '../../utils/ThemeSwitch';
 import { Drawer } from './Drawer';
 import { DrawerItem, DrawerItemGeneric } from './DrawerItem';
@@ -7,7 +9,9 @@ import { DrawerItem, DrawerItemGeneric } from './DrawerItem';
 export const SideDrawer: FC = () => {
   const [isOpen, setOpen] = useState(false);
   const drawerRef = useRef<any>(null);
-
+  const auth = useAuth();
+  const { logout } = useLogout();
+  const navigate = useNavigate();
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (drawerRef.current && !drawerRef.current.contains(event.target)) {
@@ -39,7 +43,18 @@ export const SideDrawer: FC = () => {
           <DrawerItemGeneric>
             <ThemeSwitch />
           </DrawerItemGeneric>
-          <DrawerItem icon={<MdLogout size={24} />}>Logout</DrawerItem>
+          {auth.authenticated && (
+            <DrawerItem
+              onClick={() => {
+                logout(() => {
+                  navigate('/');
+                });
+              }}
+              icon={<MdLogout size={24} />}
+            >
+              Logout
+            </DrawerItem>
+          )}
         </div>
       </Drawer>
     </div>

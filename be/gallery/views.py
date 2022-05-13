@@ -6,6 +6,7 @@ from gallery.models import Post, Profile, User
 from gallery.serializers import PostSerializer, ProfileSerializer, UserSerializer
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from djoser.signals import user_registered
 from django.dispatch import receiver
 
@@ -16,6 +17,7 @@ def create_user_profile(user, request, **kwargs):
     new_profile.save()
 
 
+#posts
 @csrf_exempt
 @api_view(['GET'])
 def posts(request):
@@ -24,6 +26,7 @@ def posts(request):
         serialized_posts = PostSerializer(posts, many=True, context={"request": request})
         return Response(serialized_posts.data)
 
+#post by id
 @csrf_exempt
 @api_view(['GET'])
 def post(request, id):
@@ -32,6 +35,7 @@ def post(request, id):
         serialized_post = PostSerializer(post, context={"request": request})
         return Response(serialized_post.data)
 
+#all users
 @csrf_exempt
 @api_view(['GET'])
 def users(request):
@@ -39,3 +43,14 @@ def users(request):
         users = Profile.objects.all()
         serialized_users = ProfileSerializer(users, many=True, context={"request": request})
         return Response(serialized_users.data)
+
+@csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def me(request):
+    if (request.method == 'GET'):
+        user = User.objects.get(pk=request.user.id)
+        profile = Profile.objects.get(user=user)
+        serialized_profile = ProfileSerializer(profile, context={"request": request})
+        print(request.user.id)
+        return Response(serialized_profile.data)

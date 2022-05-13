@@ -29,10 +29,12 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 MEDIA_DIR = 'media'
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'
 
 REST_FRAMEWORK = {  
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        #'rest_framework.permissions.IsAuthenticated',
     ),  
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',

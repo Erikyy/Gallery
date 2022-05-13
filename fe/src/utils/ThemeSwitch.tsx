@@ -16,18 +16,18 @@ export const ThemeSwitch: FC = () => {
   };
 
   if (isOn) {
-    document.documentElement.classList.remove('dark');
-    localStorage.setItem('theme', 'light');
-  } else {
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
   }
 
   return (
     <div className="flex flex-row align-middle">
       <div
         onClick={toggle}
-        className={`flex-start flex h-[30px] w-[60px] rounded-[50px] bg-zinc-100 p-[5px] shadow-inner hover:cursor-pointer dark:bg-zinc-700 ${
+        className={`border border-slate-300 dark:border-slate-600 flex-start flex h-[30px] w-[60px] rounded-[50px] bg-zinc-100 p-[5px] shadow-inner hover:cursor-pointer dark:bg-zinc-700 ${
           isOn && 'place-content-end'
         }`}
       >
@@ -42,9 +42,9 @@ export const ThemeSwitch: FC = () => {
         >
           <div>
             {isOn ? (
-              <MdLightMode className="text-slate-200" />
-            ) : (
               <MdDarkMode className="text-slate-200" />
+            ) : (
+              <MdLightMode className="text-slate-200" />
             )}
           </div>
         </motion.div>
