@@ -13,7 +13,7 @@ export const DrawerItem: FC<DrawerItemProps> = ({
   return (
     <div
       onClick={onClick}
-      className="p-4 w-full hover:bg-slate-300 dark:hover:bg-slate-600 mr-4"
+      className="p-4 w-full rounded-xl hover:bg-slate-300 dark:hover:bg-slate-600 mr-4"
     >
       <div className="flex flex-row align-middle justify-start">
         {icon && <span className="mr-8">{icon}</span>}
