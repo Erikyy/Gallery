@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../utils/Api';
+import { Button } from './Button';
 import { SideDrawer } from './drawer/SideDrawer';
 
 export const Header: FC = () => {
@@ -12,13 +13,9 @@ export const Header: FC = () => {
       {auth.authenticated ? (
         <div>authenticated</div>
       ) : (
-        <div className="flex pr-4 p-2 h-full">
-          <button className="border border-slate-400 rounded-2xl py-2 px-4">
-            Login
-          </button>
-          <button className="border border-slate-400 rounded-2xl py-2 px-4">
-            Signup
-          </button>
+        <div className="flex p-4 h-full">
+          <Button>Login</Button>
+          <Button>Signup</Button>
         </div>
       )}
     </header>
