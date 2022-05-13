@@ -104,6 +104,20 @@ const useLogout = () => {
   return {};
 };
 
+export const useAuth = () => {
+  const [cookies, setCookie, removeCookie] = useCookies([
+    'access_token',
+    'refresh_token'
+  ]);
+
+  if (!cookies.access_token && !cookies.refresh_token) {
+    return {
+      authenticated: false
+    };
+  }
+  return { authenticated: true };
+};
+
 export const RequireAuth: FC = ({ children }) => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([
