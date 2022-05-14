@@ -242,7 +242,12 @@ export const RequireAuth: FC = ({ children }) => {
     'access_token',
     'refresh_token'
   ]);
-  if (!cookies.access_token && !cookies.refresh_token) {
+  if (
+    !cookies.access_token ||
+    !cookies.refresh_token ||
+    (cookies.access_token === 'undefined' &&
+      cookies.refresh_token === 'undefined')
+  ) {
     navigate('/login');
   }
   return <>{children}</>;

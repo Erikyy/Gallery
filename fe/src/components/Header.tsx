@@ -11,7 +11,7 @@ export const Header: FC = () => {
   console.log(auth.authenticated);
 
   return (
-    <header className="border-b justify-between px-4 py-2 ease-in-out transition-all duration-300 border-b-gray-200 dark:border-gray-600 bg-slate-50 dark:bg-gray-800 shadow-sm w-full flex flex-row align-middle h-16">
+    <header className="fixed z-20 border-b justify-between px-4 py-2 ease-in-out transition-all duration-300 border-b-gray-200 dark:border-gray-600 bg-slate-50 dark:bg-gray-800 shadow-sm w-full flex flex-row align-middle h-16">
       <SideDrawer />
       {auth.authenticated ? (
         <ProfileHeader />

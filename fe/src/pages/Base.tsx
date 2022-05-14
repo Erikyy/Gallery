@@ -4,9 +4,14 @@ import { Header } from '../components/Header';
 
 export const Base: FC = () => {
   return (
-    <div>
-      <Header />
-      <Outlet />
+    <div className="w-full h-full m-0">
+      <div className="absolute mt-0">
+        <Header />
+      </div>
+
+      <div className="mt-16">
+        <Outlet />
+      </div>
     </div>
   );
 };

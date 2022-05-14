@@ -12,19 +12,18 @@ export const ProfileHeader: FC = () => {
     true,
     cookies.access_token
   );
-  console.log(data);
+
   useEffect(() => {
     if (error) {
       refresh(() => {
-        console.log('refresh');
-
         fetchData();
       });
     }
   }, [error]);
-  if (loading) {
+  if (loading || !data) {
     return null;
   }
+
   return (
     <div className="flex">
       <div className="h-full flex flex-col justify-center pr-2">
