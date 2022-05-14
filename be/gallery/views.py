@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from djoser.signals import user_registered
 from django.dispatch import receiver
+from rest_framework.exceptions import NotAuthenticated
 
 @receiver(user_registered)
 def create_user_profile(user, request, **kwargs):
@@ -17,14 +18,36 @@ def create_user_profile(user, request, **kwargs):
     new_profile.save()
 
 
+def has_permission(request):
+    print(request)
+    if (request.user and
+        request.user.is_authenticated):
+        return True
+    else:
+        return False
 #posts
 @csrf_exempt
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def posts(request):
     if request.method == 'GET':
         posts = Post.objects.all()
         serialized_posts = PostSerializer(posts, many=True, context={"request": request})
         return Response(serialized_posts.data)
+
+    if request.method == 'POST':
+        print(request.data)
+        
+        if has_permission(request):
+            user = User.objects.get(pk=request.user.id)
+            new_post = Post()
+            new_post.user = user
+            new_post.title = request.data['title']
+            new_post.description = request.data['description']
+            new_post.image = request.FILES.get('file')
+            new_post.save()
+            return Response()
+        else:
+            return Response('Unauthorized')
 
 #post by id
 @csrf_exempt
@@ -54,3 +77,16 @@ def me(request):
         serialized_profile = ProfileSerializer(profile, context={"request": request})
         print(request.user.id)
         return Response(serialized_profile.data)
+
+@api_view(['POST'])
+#@permission_classes([IsAuthenticated])
+def create_post(request):
+    if (request.method == 'POST'):
+        #user = User.objects.get(pk=request.user.id)
+        #new_post = Post()
+        #new_post.user = user
+        
+        #new_post.save()
+       # serialized_post = PostSerializer(new_post, context={"request": request})
+        return Response(request.data)
+        

@@ -220,9 +220,13 @@ export const useAuth = () => {
     'refresh_token'
   ]);
 
+  console.log(cookies);
+
   if (
-    cookies.access_token === undefined &&
-    cookies.refresh_token === undefined
+    !cookies.access_token ||
+    !cookies.refresh_token ||
+    (cookies.access_token === 'undefined' &&
+      cookies.refresh_token === 'undefined')
   ) {
     return {
       authenticated: false
