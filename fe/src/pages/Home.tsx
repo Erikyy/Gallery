@@ -1,11 +1,23 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
+import { MdSearch } from 'react-icons/md';
+import { MasonryGrid } from '../components/masonry/MasonryGrid';
+import { MasonryItem } from '../components/masonry/MasonryItem';
 import { Spinner } from '../components/Spinner';
 import { useAuth, useQuery } from '../utils/Api';
 
 export const HomePage: FC = () => {
-  const { data, loading, error } = useQuery('api/posts/', false);
+  const [searchInput, setSearchInput] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const { data, loading, error, fetchData } = useQuery(
+    `api/posts?search=${searchQuery}&page=1&order_by=created_at&sort=desc`,
+    false
+  );
 
   const auth = useAuth();
+
+  useEffect(() => {
+    fetchData();
+  }, [searchQuery]);
 
   if (loading) {
     return <Spinner />;
@@ -13,34 +25,41 @@ export const HomePage: FC = () => {
   console.log(data);
 
   return (
-    <div className="relative flex min-h-screen flex-col justify-center py-6 sm:py-12">
-      <div className="columns-2 2xl:columns-3 gap-10 [column-fill:_balance] box-border mx-auto before:box-inherit after:box-inherit">
-        <div className="break-inside-avoid p-8 mb-6 bg-gray-100 rounded-lg">
-          <p>Really" long content</p>
-        </div>
-        <div className="break-inside-avoid p-8 mb-6 bg-gray-100 rounded-lg">
-          <p>Really long content</p>
-          <p>Really long content</p>
-          <p>Really long content</p>
-          <p>Really long content</p>
-        </div>
-        <div className="break-before-avoid p-8 mb-6 bg-gray-100 rounded-lg">
-          <p>Really long content</p>
-          <p>Really long content</p>
-        </div>
-        <div className="break-inside-avoid p-8 mb-6 bg-gray-100 rounded-lg">
-          <p>Really long content</p>
-          <p>Really long content</p>
-          <p>Really long content</p>
-          <p>Really long content</p>
-          <p>Really long content</p>
-        </div>
-        <div className="break-inside-avoid p-8 mb-6 bg-gray-100 rounded-lg">
-          <p>Really long content</p>
-          <p>Really long content</p>
-          <p>Really long content</p>
-        </div>
+    <div className="p-4">
+      <div className="flex rounded-full border-grey-light border">
+        <button>
+          <span className="w-auto flex justify-end items-center text-grey p-2">
+            <MdSearch />
+          </span>
+        </button>
+        <input
+          value={searchInput}
+          onChange={(e) => {
+            setSearchInput(e.target.value);
+          }}
+          className="w-full shadow-none focus:outline-none bg-transparent border-0 mr-4"
+          type="text"
+          placeholder="Search..."
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              console.log('search');
+
+              setSearchQuery(searchInput);
+            }
+          }}
+        />
       </div>
+      <MasonryGrid>
+        {data.map((post: any) => {
+          return (
+            <MasonryItem>
+              <div className="w-1/2 h-auto">
+                <img className="" src={post.post_image_url} />
+              </div>
+            </MasonryItem>
+          );
+        })}
+      </MasonryGrid>
     </div>
   );
 };

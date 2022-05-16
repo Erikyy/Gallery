@@ -10,6 +10,8 @@ from rest_framework.permissions import IsAuthenticated
 from djoser.signals import user_registered
 from django.dispatch import receiver
 from rest_framework.exceptions import NotAuthenticated
+from rest_framework.pagination import PageNumberPagination
+from django.db.models import Q
 
 @receiver(user_registered)
 def create_user_profile(user, request, **kwargs):
@@ -30,8 +32,18 @@ def has_permission(request):
 @api_view(['GET', 'POST'])
 def posts(request):
     if request.method == 'GET':
-        posts = Post.objects.all()
-        serialized_posts = PostSerializer(posts, many=True, context={"request": request})
+        posts = []
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        if (request.query_params['order_by'] is not None and request.query_params['sort'] is not None and request.query_params['search'] is not None):
+            search_q = request.query_params['search']
+            if (request.query_params['sort'] == 'asc'):
+                posts = Post.objects.filter(Q(title__icontains=search_q) | Q(post_id__icontains=search_q)).order_by(request.query_params['order_by'])
+            elif (request.query_params['sort'] == 'desc'):
+                posts = Post.objects.filter(Q(title__icontains=search_q) | Q(post_id__icontains=search_q)).order_by('-' + request.query_params['order_by'])
+        
+        result_page = paginator.paginate_queryset(posts, request)
+        serialized_posts = PostSerializer(result_page, many=True, context={"request": request})
         return Response(serialized_posts.data)
 
     if request.method == 'POST':

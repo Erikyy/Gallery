@@ -28,9 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-MEDIA_DIR = 'media'
+MEDIA_DIR = ''
 MEDIA_ROOT = MEDIA_DIR
-MEDIA_URL = '/media/'
+MEDIA_URL = '/'
 
 REST_FRAMEWORK = {  
     'DEFAULT_PERMISSION_CLASSES': (
@@ -38,7 +38,9 @@ REST_FRAMEWORK = {
     ),  
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2,
 }
 
 SIMPLE_JWT = {
@@ -82,6 +84,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'djoser',
+    'django_filters',
     'gallery'
 ]
 

@@ -27,7 +27,7 @@ export const ProfileHeader: FC = () => {
   return (
     <div className="flex">
       <div className="h-full flex flex-col justify-center pr-2">
-        <p>{data.user.username}</p>
+        <p className="dark:text-white">{data.user.username}</p>
       </div>
       <img
         onClick={() => {
