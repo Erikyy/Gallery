@@ -8,7 +8,7 @@ interface SearchbarProps {
 export const Searchbar: FC<SearchbarProps> = ({ onEnterPressed }) => {
   const [searchInput, setSearchInput] = useState('');
   return (
-    <div className="w-80 fixed z-20">
+    <div className="w-80">
       <div className="pt-2 w-full relative mx-auto text-gray-600">
         <input
           value={searchInput}
@@ -20,7 +20,6 @@ export const Searchbar: FC<SearchbarProps> = ({ onEnterPressed }) => {
           placeholder="Search..."
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              console.log('search');
               onEnterPressed(searchInput);
               setSearchInput(searchInput);
             }

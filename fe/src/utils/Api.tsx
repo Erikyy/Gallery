@@ -127,8 +127,6 @@ export const useRefresh = () => {
       {
         path: 'api/auth/jwt/refresh/',
         onSuccess(res) {
-          console.log(res);
-
           setCookie('access_token', res.access);
           onSuccess();
         },
@@ -162,7 +160,6 @@ export const useLogin = () => {
       {
         path: 'api/auth/jwt/create/',
         onSuccess(result) {
-          console.log(result);
           setCookie('access_token', result.access);
           setCookie('refresh_token', result.refresh);
           onSuccess();
@@ -219,8 +216,6 @@ export const useAuth = () => {
     'access_token',
     'refresh_token'
   ]);
-
-  console.log(cookies);
 
   if (
     !cookies.access_token ||

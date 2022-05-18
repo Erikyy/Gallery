@@ -36,24 +36,33 @@ export const SideDrawer: FC = () => {
       </button>
       <Drawer drawerRef={drawerRef} isOpen={isOpen}>
         <div className="flex-1">
-          <DrawerItem icon={<MdHome size={24} />}>Home</DrawerItem>
-          <DrawerItem icon={<MdSettings size={24} />}>Settings</DrawerItem>
+          <DrawerItem
+            onClick={() => {
+              navigate('/');
+            }}
+            icon={<MdHome size={24} />}
+          >
+            Home
+          </DrawerItem>
         </div>
         <div className="flex-2">
           <DrawerItemGeneric>
             <ThemeSwitch />
           </DrawerItemGeneric>
           {auth.authenticated && (
-            <DrawerItem
-              onClick={() => {
-                logout(() => {
-                  navigate('/');
-                });
-              }}
-              icon={<MdLogout size={24} />}
-            >
-              Logout
-            </DrawerItem>
+            <>
+              <DrawerItem icon={<MdSettings size={24} />}>Settings</DrawerItem>
+              <DrawerItem
+                onClick={() => {
+                  logout(() => {
+                    navigate('/');
+                  });
+                }}
+                icon={<MdLogout size={24} />}
+              >
+                Logout
+              </DrawerItem>
+            </>
           )}
         </div>
       </Drawer>
