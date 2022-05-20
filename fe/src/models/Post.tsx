@@ -6,7 +6,9 @@ export type Post = {
   post_image_url: string;
   post_id: string;
   description: string;
-  likes: number;
-  dislikes: number;
+  number_of_likes: number;
+  number_of_dislikes: number;
   user: User;
+  has_liked: boolean;
+  has_disliked: boolean;
 };

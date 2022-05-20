@@ -1,12 +1,21 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { MdThumbDown, MdThumbUp } from 'react-icons/md';
 import { Post } from '../../models/Post';
+import { IconButton } from '../IconButton';
 
 interface PostItemProps {
   post: Post;
   onClick: (postId: string) => void;
+  onLikeClicked: () => void;
+  onDislikeClicked: () => void;
 }
 
-export const PostItem: FC<PostItemProps> = ({ post, onClick }) => {
+export const PostItem: FC<PostItemProps> = ({
+  post,
+  onClick,
+  onLikeClicked,
+  onDislikeClicked
+}) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [showFullButton, setShowFullButton] = useState(false);
 
@@ -47,9 +56,32 @@ export const PostItem: FC<PostItemProps> = ({ post, onClick }) => {
           </div>
         )}
       </div>
-      <div className="flex pt-4 space-x-2">
-        <p className="dark:text-white">{post.likes}</p>
-        <p className="dark:text-white">{post.dislikes}</p>
+      <div className="pt-2 flex space-x-2">
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onLikeClicked();
+          }}
+          icon={
+            <MdThumbUp color={post.has_liked ? 'yellow' : 'white'} size={22} />
+          }
+        >
+          {post.number_of_likes}
+        </IconButton>
+        <IconButton
+          onClick={(e) => {
+            e.stopPropagation();
+            onDislikeClicked();
+          }}
+          icon={
+            <MdThumbDown
+              color={post.has_disliked ? 'yellow' : 'white'}
+              size={22}
+            />
+          }
+        >
+          {post.number_of_dislikes}
+        </IconButton>
       </div>
     </div>
   );

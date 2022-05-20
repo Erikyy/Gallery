@@ -16,8 +16,8 @@ class Post(models.Model):
     post_image = models.ImageField(blank=False, upload_to=get_folder, default='media/default.jpg')
     created_at = models.DateTimeField("created_at", default=datetime.now)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
+    likes = models.ManyToManyField(User, related_name="post_like", blank=True, null=True)
+    dislikes = models.ManyToManyField(User, related_name="post_dislike", blank=True, null=True)
     post_id = models.CharField(max_length=15, default=gen_post_id, unique=True)
 
     def __str__(self) -> str:
@@ -26,6 +26,19 @@ class Post(models.Model):
     def image(self):
         return self.image 
 
+    def number_of_likes(self):
+        return self.likes.count()
+
+    def number_of_dislikes(self):
+        return self.dislikes.count()
+
+    def has_liked(self, user: User):
+        return self.likes.filter(pk=user.pk).exists()
+        
+    def has_disliked(self, user: User):
+        print(self.dislikes.filter(pk=user.pk).exists())
+        return self.dislikes.filter(pk=user.pk).exists()
+ 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to=get_folder, default='media/default.jpg', blank=True)

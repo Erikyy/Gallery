@@ -63,12 +63,36 @@ def posts(request):
 
 #post by id
 @csrf_exempt
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def post(request, id):
     if request.method == 'GET':
         post = Post.objects.get(post_id=id)
         serialized_post = PostSerializer(post, context={"request": request})
         return Response(serialized_post.data)
+    elif request.method == 'POST':
+        if (has_permission(request)):
+            if (request.query_params['action']):
+                post: Post = Post.objects.get(post_id=id)
+                user: User = User.objects.get(pk=request.user.id)
+                if request.query_params['action'] == 'like':
+                    if post.dislikes.filter(pk=user.pk).exists():
+                        post.dislikes.remove(user)
+                    
+                    if post.likes.filter(pk=user.pk).exists():
+                        post.likes.remove(user)
+                    else:
+                        post.likes.add(user)
+
+                elif request.query_params['action'] == 'dislike':
+                    if post.likes.filter(pk=user.pk).exists():
+                        post.likes.remove(user)
+                    
+                    if post.dislikes.filter(pk=user.pk).exists():
+                        post.dislikes.remove(user)
+                    else:
+                        post.dislikes.add(user)
+            return Response()
+
 
 #all users
 @csrf_exempt

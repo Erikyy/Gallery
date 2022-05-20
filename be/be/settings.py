@@ -27,7 +27,17 @@ SECRET_KEY = 'django-insecure-xwp&%en3)v36%#kpi0oae5f-wv-03^w+1jm6i7j^uwu4*^+j*3
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+CORS_ALLOW_HEADERS = ['token', "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",]
+    
+CORS_ALLOW_CREDENTIALS = True
 MEDIA_DIR = ''
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/'
@@ -148,7 +158,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contriToken: `${token}`b.auth.password_validation.NumericPasswordValidator',
     },
 ]
 

@@ -53,8 +53,12 @@ export const PostPage: FC = () => {
           <p className="dark:text-white">{post.description}</p>
         </div>
         <div className="pt-2 flex space-x-2">
-          <IconButton icon={<MdThumbUp size={22} />}>{post.likes}</IconButton>
-          <IconButton icon={<MdThumbDown size={22} />}>{post.likes}</IconButton>
+          <IconButton icon={<MdThumbUp size={22} />}>
+            {post.number_of_dislikes}
+          </IconButton>
+          <IconButton icon={<MdThumbDown size={22} />}>
+            {post.number_of_dislikes}
+          </IconButton>
         </div>
       </div>
     </div>

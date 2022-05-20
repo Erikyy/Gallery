@@ -20,7 +20,8 @@ export const useQuery = (
   });
   const normalheaders = new Headers({
     Accept: 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    Token: `${token}`
   });
   const fetchData = async () => {
     setLoading(true);
@@ -35,6 +36,8 @@ export const useQuery = (
           return response.json();
         }
         const data = await response.json();
+        console.log(data);
+
         throw new Error(JSON.stringify(data));
       })
       .then((jsondata) => {
@@ -54,7 +57,7 @@ export const useQuery = (
   return { data, loading, error, fetchData };
 };
 
-const useMutation = (requireAuth: boolean, token?: string) => {
+export const useMutation = (requireAuth: boolean, token?: string) => {
   const [data, setData] = useState<any>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(undefined);

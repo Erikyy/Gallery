@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { MdAdd } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 import { PostItem } from '../components/list/PostItem';
@@ -6,14 +7,17 @@ import { PostList } from '../components/list/PostList';
 import { Searchbar } from '../components/Searchbar';
 import { Spinner } from '../components/Spinner';
 import { Post } from '../models/Post';
-import { useAuth, useQuery } from '../utils/Api';
+import { useAuth, useMutation, useQuery } from '../utils/Api';
 
 export const HomePage: FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [cookies] = useCookies(['access_token']);
   const { data, loading, error, fetchData } = useQuery(
     `api/posts?search=${searchQuery}&page=1&order_by=created_at&sort=desc`,
-    false
+    false,
+    cookies.access_token
   );
+  const { mutate } = useMutation(true, cookies.access_token);
   const navigate = useNavigate();
   const auth = useAuth();
 
@@ -49,6 +53,34 @@ export const HomePage: FC = () => {
               key={post.post_id}
               onClick={(postId: string) => {
                 navigate(`/${postId}`);
+              }}
+              onLikeClicked={() => {
+                mutate(
+                  {},
+                  {
+                    path: `api/posts/${post.post_id}?action=like`,
+                    onError(err) {
+                      console.log(err);
+                    },
+                    onSuccess(res) {
+                      console.log(res);
+                    }
+                  }
+                );
+              }}
+              onDislikeClicked={() => {
+                mutate(
+                  {},
+                  {
+                    path: `api/posts/${post.post_id}?action=dislike`,
+                    onError(err) {
+                      console.log(err);
+                    },
+                    onSuccess(res) {
+                      console.log(res);
+                    }
+                  }
+                );
               }}
               post={post}
             />
