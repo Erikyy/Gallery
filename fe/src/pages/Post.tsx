@@ -1,17 +1,23 @@
 import React, { FC, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 import { MdThumbDown, MdThumbsUpDown, MdThumbUp } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router';
 import { IconButton } from '../components/IconButton';
+import { SocialButtons } from '../components/SocialButtons';
 import { Spinner } from '../components/Spinner';
 import { Post } from '../models/Post';
-import { useQuery } from '../utils/Api';
+import { useAuth, useMutation, useQuery } from '../utils/Api';
 
 export const PostPage: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [cookies] = useCookies(['access_token']);
+  const { mutate } = useMutation(true, cookies.access_token);
+  const auth = useAuth();
   const { data, loading, error } = useQuery(
     `api/posts/${location.pathname.split('/')[1]}`,
-    false
+    false,
+    cookies.access_token
   );
   const post: Post = data;
   useEffect(() => {
@@ -52,14 +58,42 @@ export const PostPage: FC = () => {
         <div className="pt-2 w-full">
           <p className="dark:text-white">{post.description}</p>
         </div>
-        <div className="pt-2 flex space-x-2">
-          <IconButton icon={<MdThumbUp size={22} />}>
-            {post.number_of_dislikes}
-          </IconButton>
-          <IconButton icon={<MdThumbDown size={22} />}>
-            {post.number_of_dislikes}
-          </IconButton>
-        </div>
+        <SocialButtons
+          authenticated={auth.authenticated}
+          onLikeClicked={() => {
+            if (auth.authenticated) {
+              mutate(
+                {},
+                {
+                  path: `api/posts/${post.post_id}?action=like`,
+                  onError(err) {
+                    console.log(err);
+                  },
+                  onSuccess(res) {
+                    console.log(res);
+                  }
+                }
+              );
+            }
+          }}
+          onDislikeClicked={() => {
+            if (auth.authenticated) {
+              mutate(
+                {},
+                {
+                  path: `api/posts/${post.post_id}?action=dislike`,
+                  onError(err) {
+                    console.log(err);
+                  },
+                  onSuccess(res) {
+                    console.log(res);
+                  }
+                }
+              );
+            }
+          }}
+          post={post}
+        />
       </div>
     </div>
   );

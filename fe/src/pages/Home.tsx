@@ -50,37 +50,42 @@ export const HomePage: FC = () => {
         {data.map((post: Post) => {
           return (
             <PostItem
+              hasAuthenticated={auth.authenticated}
               key={post.post_id}
               onClick={(postId: string) => {
                 navigate(`/${postId}`);
               }}
               onLikeClicked={() => {
-                mutate(
-                  {},
-                  {
-                    path: `api/posts/${post.post_id}?action=like`,
-                    onError(err) {
-                      console.log(err);
-                    },
-                    onSuccess(res) {
-                      console.log(res);
+                if (auth.authenticated) {
+                  mutate(
+                    {},
+                    {
+                      path: `api/posts/${post.post_id}?action=like`,
+                      onError(err) {
+                        console.log(err);
+                      },
+                      onSuccess(res) {
+                        console.log(res);
+                      }
                     }
-                  }
-                );
+                  );
+                }
               }}
               onDislikeClicked={() => {
-                mutate(
-                  {},
-                  {
-                    path: `api/posts/${post.post_id}?action=dislike`,
-                    onError(err) {
-                      console.log(err);
-                    },
-                    onSuccess(res) {
-                      console.log(res);
+                if (auth.authenticated) {
+                  mutate(
+                    {},
+                    {
+                      path: `api/posts/${post.post_id}?action=dislike`,
+                      onError(err) {
+                        console.log(err);
+                      },
+                      onSuccess(res) {
+                        console.log(res);
+                      }
                     }
-                  }
-                );
+                  );
+                }
               }}
               post={post}
             />

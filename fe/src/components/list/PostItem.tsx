@@ -2,8 +2,10 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { MdThumbDown, MdThumbUp } from 'react-icons/md';
 import { Post } from '../../models/Post';
 import { IconButton } from '../IconButton';
+import { SocialButtons } from '../SocialButtons';
 
 interface PostItemProps {
+  hasAuthenticated: boolean;
   post: Post;
   onClick: (postId: string) => void;
   onLikeClicked: () => void;
@@ -14,7 +16,8 @@ export const PostItem: FC<PostItemProps> = ({
   post,
   onClick,
   onLikeClicked,
-  onDislikeClicked
+  onDislikeClicked,
+  hasAuthenticated
 }) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const [showFullButton, setShowFullButton] = useState(false);
@@ -56,33 +59,16 @@ export const PostItem: FC<PostItemProps> = ({
           </div>
         )}
       </div>
-      <div className="pt-2 flex space-x-2">
-        <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            onLikeClicked();
-          }}
-          icon={
-            <MdThumbUp color={post.has_liked ? 'yellow' : 'white'} size={22} />
-          }
-        >
-          {post.number_of_likes}
-        </IconButton>
-        <IconButton
-          onClick={(e) => {
-            e.stopPropagation();
-            onDislikeClicked();
-          }}
-          icon={
-            <MdThumbDown
-              color={post.has_disliked ? 'yellow' : 'white'}
-              size={22}
-            />
-          }
-        >
-          {post.number_of_dislikes}
-        </IconButton>
-      </div>
+      <SocialButtons
+        authenticated={hasAuthenticated}
+        onLikeClicked={() => {
+          onLikeClicked();
+        }}
+        onDislikeClicked={() => {
+          onDislikeClicked();
+        }}
+        post={post}
+      />
     </div>
   );
 };
