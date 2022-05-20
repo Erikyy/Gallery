@@ -42,7 +42,12 @@ export const HomePage: FC = () => {
             }}
           />
           {auth.authenticated && (
-            <button className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-500">
+            <button
+              onClick={() => {
+                navigate('/newpost');
+              }}
+              className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-500"
+            >
               <MdAdd size={24} className="dark:text-white" />
             </button>
           )}
