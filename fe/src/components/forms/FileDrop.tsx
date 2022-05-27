@@ -19,7 +19,7 @@ export const FileDrop: FC = () => {
         {img ? (
           <img className=" max-h-96 mx-auto z-20 relative p-4" src={img} />
         ) : (
-          <div className="text-center p-10 absolute top-0 right-0 left-0 m-auto">
+          <div className="text-center p-10 relative top-0 right-0 left-0 m-auto">
             <h4>
               Drop files anywhere to upload
               <br />
