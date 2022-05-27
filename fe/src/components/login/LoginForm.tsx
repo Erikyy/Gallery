@@ -21,7 +21,7 @@ export const LoginForm: FC = () => {
     );
   };
   return (
-    <div className="p-4 mr-auto ml-auto border rounded-xl border-slate-300 shadow-xl sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6">
+    <div className="p-4 mr-auto ml-auto border rounded-xl bg-slate-100 border-slate-100 shadow-xl sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6">
       <form className="" onSubmit={handleSubmit}>
         <Input
           id="username"
@@ -45,7 +45,7 @@ export const LoginForm: FC = () => {
           <p>
             Not registered?{' '}
             <Link className="text-blue-500 hover:underline" to="/signup">
-              Signup here!
+              Sign up here!
             </Link>
           </p>
         </div>

@@ -12,7 +12,7 @@ export const Input: FC<InputProps> = ({ type, label, id, error }) => {
   return (
     <div className="flex flex-col">
       <label
-        className={`bg-white dark:bg-slate-700 max-w-fit relative transition-all ease-in-out duration-100 ${
+        className={`bg-slate-100 dark:bg-slate-700 max-w-fit relative transition-all ease-in-out duration-100 ${
           focused || (inputRef.current && inputRef.current.value !== '')
             ? 'top-3 left-3 text-sm '
             : 'top-10 left-3 text-sm'
@@ -29,7 +29,7 @@ export const Input: FC<InputProps> = ({ type, label, id, error }) => {
         onBlur={() => {
           setFocused(false);
         }}
-        className="rounded border border-slate-300 bg-white/[0]"
+        className="rounded border border-slate-300 bg-slate-100/[1]"
         type={type}
         id={id}
       />
