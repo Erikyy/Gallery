@@ -10,6 +10,7 @@ import { SignupPage } from './pages/Signup';
 import { RequireAuth, useQuery, useRefresh } from './utils/Api';
 import { setUser } from './features/user/UserSlice';
 import { useDispatch } from 'react-redux';
+import { NewPostPage } from './pages/NewPost';
 const App: FC = () => {
   const [cookies] = useCookies(['access_token']);
   const dispatch = useDispatch();
@@ -42,6 +43,14 @@ const App: FC = () => {
             element={
               <RequireAuth>
                 <ProfilePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="newpost"
+            element={
+              <RequireAuth>
+                <NewPostPage />
               </RequireAuth>
             }
           />

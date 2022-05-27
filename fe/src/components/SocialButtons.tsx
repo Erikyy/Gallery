@@ -1,5 +1,10 @@
 import React, { FC, useState } from 'react';
-import { MdThumbUp, MdThumbDown } from 'react-icons/md';
+import {
+  MdThumbUp,
+  MdThumbDown,
+  MdFavoriteBorder,
+  MdFavorite
+} from 'react-icons/md';
 import { Post } from '../models/Post';
 import { IconButton } from './IconButton';
 
@@ -43,32 +48,15 @@ export const SocialButtons: FC<SocialButtonsProps> = ({
             setLiked(!hasLiked);
           }
         }}
-        icon={<MdThumbUp color={hasLiked ? 'yellow' : 'white'} size={22} />}
-      >
-        {numberOfLikes}
-      </IconButton>
-      <IconButton
-        onClick={(e) => {
-          e.stopPropagation();
-          if (authenticated) {
-            onDislikeClicked();
-            if (hasLiked) {
-              setNumberOfLikes(numberOfLikes - 1);
-              setLiked(false);
-            }
-            if (hasDisliked) {
-              setNumberOfDislikes(numberOfDislikes - 1);
-            } else {
-              setNumberOfDislikes(numberOfDislikes + 1);
-            }
-            setDisliked(!hasDisliked);
-          }
-        }}
         icon={
-          <MdThumbDown color={hasDisliked ? 'yellow' : 'white'} size={22} />
+          hasLiked ? (
+            <MdFavorite color="#e3094a" size={22} />
+          ) : (
+            <MdFavoriteBorder color="white" size={22} />
+          )
         }
       >
-        {numberOfDislikes}
+        {numberOfLikes}
       </IconButton>
     </div>
   );

@@ -33,20 +33,25 @@ export const HomePage: FC = () => {
   }
 
   return (
-    <div className="p-4 flex justify-center">
-      <PostList>
-        <div className="w-full justify-between flex p-4 rounded-lg bg-slate-100 dark:bg-slate-600">
-          <Searchbar
-            onEnterPressed={(value) => {
-              setSearchQuery(value);
+    <div className="p-4 space-y-9">
+      <div className="w-full justify-between flex p-4 rounded-lg bg-slate-100 dark:bg-slate-600">
+        <Searchbar
+          onEnterPressed={(value) => {
+            setSearchQuery(value);
+          }}
+        />
+        {auth.authenticated && (
+          <button
+            onClick={() => {
+              navigate('/newpost');
             }}
-          />
-          {auth.authenticated && (
-            <button className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-500">
-              <MdAdd size={24} className="dark:text-white" />
-            </button>
-          )}
-        </div>
+            className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-500"
+          >
+            <MdAdd size={24} className="dark:text-white" />
+          </button>
+        )}
+      </div>
+      <PostList>
         {data.map((post: Post) => {
           return (
             <PostItem

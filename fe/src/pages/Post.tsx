@@ -32,7 +32,7 @@ export const PostPage: FC = () => {
   }
   return (
     <div className="w-full h-full flex justify-center">
-      <div className="w-full md:w-[840px] p-4 bg-slate-100 dark:bg-slate-600">
+      <div className="w-full p-4 bg-slate-100 dark:bg-slate-600">
         <div className="w-full flex justify-between">
           <div>
             <h1 className="text-xl dark:text-white">{post.title}</h1>
