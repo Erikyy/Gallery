@@ -9,7 +9,7 @@ import { Textarea } from '../components/forms/Textarea';
 import { Spinner } from '../components/Spinner';
 import { RootState } from '../features/store';
 import { Post } from '../models/Post';
-import { useQuery } from '../utils/Api';
+import { useMutation, useQuery } from '../utils/Api';
 
 export const EditPost: FC = () => {
   const location = useLocation();
@@ -20,6 +20,7 @@ export const EditPost: FC = () => {
     false,
     cookies.access_token
   );
+  const { mutate } = useMutation(true, cookies.access_token, true);
   const userProfile = useSelector((state: RootState) => state.user.user);
 
   const post: Post = data;
@@ -34,6 +35,28 @@ export const EditPost: FC = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const title = e.target.elements.title.value;
+    const description = e.target.elements.description.value;
+    const file = e.target.elements.image.files[0];
+
+    formData.append('title', title);
+    formData.append('description', description);
+    if (file) {
+      formData.append('file', file);
+    }
+
+    mutate(formData, {
+      path: `api/posts/${location.pathname.split('/')[1]}`,
+      onError(e) {},
+      onSuccess(res) {
+        console.log('success');
+
+        navigate(`/${location.pathname.split('/')[1]}`);
+      },
+      overrideMethod: 'PATCH'
+    });
   };
   if (loading) {
     return (
@@ -61,7 +84,16 @@ export const EditPost: FC = () => {
           label="Description"
         />
         <FileDrop defaultValue={post.image} id="image" />
-        <Button type="submit">Save</Button>
+        <div className="flex justify-between">
+          <Button type="submit">Save</Button>
+          <Button
+            onClick={() => {
+              navigate(`/${location.pathname.split('/')[1]}`);
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
     </div>
   );

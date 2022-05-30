@@ -1,9 +1,11 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { MdThumbDown, MdThumbsUpDown, MdThumbUp } from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import { Button } from '../components/Button';
 import { IconButton } from '../components/IconButton';
+import { Modal } from '../components/Modal';
 import { SocialButtons } from '../components/SocialButtons';
 import { Spinner } from '../components/Spinner';
 import { RootState } from '../features/store';
@@ -13,6 +15,7 @@ import { useAuth, useMutation, useQuery } from '../utils/Api';
 export const PostPage: FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const [cookies] = useCookies(['access_token']);
   const { mutate } = useMutation(true, cookies.access_token);
   const auth = useAuth();
@@ -59,7 +62,12 @@ export const PostPage: FC = () => {
           <div className="flex space-x-2">
             {post.user._id === userProfile?._id && (
               <div className="flex space-x-2">
-                <button className="dark:text-white bg-red-500 hover:bg-red-600 p-3 rounded-lg">
+                <button
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                  className="dark:text-white bg-red-500 hover:bg-red-600 p-3 rounded-lg"
+                >
                   Delete
                 </button>
                 <button
@@ -74,7 +82,7 @@ export const PostPage: FC = () => {
             )}
             <button
               onClick={() => {
-                navigate(-1);
+                navigate('/');
               }}
               className="dark:text-white hover:bg-neutral-500 p-3 rounded-lg"
             >
@@ -109,6 +117,37 @@ export const PostPage: FC = () => {
           post={post}
         />
       </div>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <div>
+          <h1>Are you sure you want to delete '{post.title}'?</h1>
+          <div className="flex justify-between pt-4">
+            <Button
+              onClick={() => {
+                mutate(
+                  {},
+                  {
+                    path: `api/posts/${location.pathname.split('/')[1]}`,
+                    onSuccess(res) {
+                      navigate('/');
+                    },
+                    onError(e) {},
+                    overrideMethod: 'DELETE'
+                  }
+                );
+              }}
+            >
+              Yes
+            </Button>
+            <Button
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              No
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
