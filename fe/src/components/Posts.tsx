@@ -9,13 +9,15 @@ import { Spinner } from './Spinner';
 
 interface PostsProps {
   searchQuery: string;
+  orderBy: string;
+  sort: string;
 }
 
-export const Posts: FC<PostsProps> = ({ searchQuery }) => {
+export const Posts: FC<PostsProps> = ({ searchQuery, orderBy, sort }) => {
   const navigate = useNavigate();
   const [cookies] = useCookies(['access_token']);
   const { data, loading, error, fetchData } = useQuery(
-    `api/posts?s=${searchQuery}`,
+    `api/posts?s=${searchQuery}&order_by=${orderBy}&sort=${sort}`,
     false,
     cookies.access_token
   );
@@ -24,7 +26,7 @@ export const Posts: FC<PostsProps> = ({ searchQuery }) => {
 
   useEffect(() => {
     fetchData();
-  }, [searchQuery]);
+  }, [searchQuery, orderBy, sort]);
 
   if (loading) {
     return (
