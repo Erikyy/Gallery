@@ -18,7 +18,7 @@ export const Button: FC<ButtonProps> = ({
       type={type}
       className={`block border ${
         disabled && 'disabled:bg-slate-400'
-      } transition-colors duration-100 ease-linear hover:bg-purple-500 text-center border-slate-400 dark:border-slate-600 dark:text-white rounded-full h-10 px-6 mx-1`}
+      } transition-colors duration-100 ease-linear hover:bg-neutral-500 text-center border-neutral-400 dark:border-neutral-600 dark:text-white rounded-full h-10 px-6 mx-1`}
       onClick={() => {
         if (onClick) onClick();
       }}

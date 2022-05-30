@@ -1,8 +1,11 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { MdLightMode, MdDarkMode } from 'react-icons/md';
 import { motion } from 'framer-motion';
+import { useDispatch } from 'react-redux';
+import { setMode } from '../features/theme/ThemeSlice';
 
 export const ThemeSwitch: FC = () => {
+  const dispatch = useDispatch();
   const [isOn, setOn] = useState<boolean>(() => {
     if (localStorage.getItem('theme') === 'light') {
       return true;
@@ -14,6 +17,14 @@ export const ThemeSwitch: FC = () => {
   const toggle = () => {
     setOn(!isOn);
   };
+
+  useEffect(() => {
+    if (isOn) {
+      dispatch(setMode('dark'));
+    } else {
+      dispatch(setMode('light'));
+    }
+  }, [isOn]);
 
   if (isOn) {
     document.documentElement.classList.add('dark');
@@ -27,7 +38,7 @@ export const ThemeSwitch: FC = () => {
     <div className="flex flex-row align-middle">
       <div
         onClick={toggle}
-        className={`border border-slate-300 dark:border-slate-600 flex-start flex h-[30px] w-[60px] rounded-[50px] bg-zinc-100 p-[5px] shadow-inner hover:cursor-pointer dark:bg-zinc-700 ${
+        className={`border border-neutral-300 dark:border-neutral-600 flex-start flex h-[30px] w-[60px] rounded-[50px] bg-zinc-100 p-[5px] shadow-inner hover:cursor-pointer dark:bg-zinc-700 ${
           isOn && 'place-content-end'
         }`}
       >

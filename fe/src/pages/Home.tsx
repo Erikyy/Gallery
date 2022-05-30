@@ -34,7 +34,7 @@ export const HomePage: FC = () => {
 
   return (
     <div className="p-4 space-y-9">
-      <div className="w-full justify-between flex p-4 rounded-lg bg-slate-100 dark:bg-slate-600">
+      <div className="w-full justify-between flex p-4 rounded-lg bg-neutral-100 dark:bg-neutral-700">
         <Searchbar
           onEnterPressed={(value) => {
             setSearchQuery(value);
@@ -45,7 +45,7 @@ export const HomePage: FC = () => {
             onClick={() => {
               navigate('/newpost');
             }}
-            className="p-2 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-500"
+            className="p-2 rounded-lg hover:bg-neutral-200 dark:hover:bg-neutral-500"
           >
             <MdAdd size={24} className="dark:text-white" />
           </button>

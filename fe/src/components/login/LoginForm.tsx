@@ -36,7 +36,7 @@ export const LoginForm: FC = () => {
     }
   };
   return (
-    <div className="p-4 mr-auto ml-auto border rounded-xl bg-slate-100 dark:bg-slate-700 border-slate-100 dark:border-slate-500 shadow-xl sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6">
+    <div className="p-4 mr-auto ml-auto border rounded-xl bg-neutral-100 dark:bg-neutral-700 border-neutral-100 dark:border-neutral-600 shadow-xl sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6">
       <form className="" onSubmit={handleSubmit}>
         <Input id="username" label="Username" type="text" />
         <Input id="password" label="Password" type="password" />

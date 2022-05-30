@@ -45,9 +45,9 @@ export const NewPostPage: FC = () => {
     <div className="w-full h-full flex justify-center ">
       <form
         onSubmit={handleSubmit}
-        className="bg-slate-100 dark:bg-slate-600 space-y-2 p-4 sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6"
+        className="bg-neutral-100 dark:bg-neutral-700 space-y-2 p-4 sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6"
       >
-        <h1 className="text-gray-700 dark:text-white">Add new post</h1>
+        <h1 className="text-neutral-700 dark:text-white">Add new post</h1>
         <Input id="title" label="Title" type={'text'} />
         <Textarea id="description" label="Description" />
         <FileDrop id="image" />

@@ -33,8 +33,8 @@ export const PostPage: FC = () => {
     );
   }
   return (
-    <div className="w-full justify-center">
-      <div className="w-full p-4 bg-slate-100 dark:bg-slate-600">
+    <div className="w-full h-full">
+      <div className="w-full h-full flex flex-col justify-between  p-4">
         <div className="w-full flex justify-between">
           <div>
             <h1 className="text-xl dark:text-white">{post.title}</h1>
@@ -62,7 +62,7 @@ export const PostPage: FC = () => {
           </button>
         </div>
         <div className="w-full pt-2 flex justify-center">
-          <img className="md:w-[512px] w-auto h-max" src={post.image} />
+          <img className="md:w-[512px] w-auto h-full" src={post.image} />
         </div>
         <div className="pt-2 w-full">
           <p className="dark:text-white">{post.description}</p>

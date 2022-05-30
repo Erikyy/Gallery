@@ -18,6 +18,7 @@ export const SocialButtons: FC<SocialButtonsProps> = ({
 }) => {
   const [numberOfLikes, setNumberOfLikes] = useState(post.likes.length);
   const userProfile = useSelector((state: RootState) => state.user.user);
+  const theme = useSelector((state: RootState) => state.theme.theme);
 
   const [hasLiked, setLiked] = useState(false);
 
@@ -46,7 +47,10 @@ export const SocialButtons: FC<SocialButtonsProps> = ({
           hasLiked ? (
             <MdFavorite color="#e3094a" size={22} />
           ) : (
-            <MdFavoriteBorder color="white" size={22} />
+            <MdFavoriteBorder
+              color={theme === 'light' ? 'black' : 'white'}
+              size={22}
+            />
           )
         }
       >

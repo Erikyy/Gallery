@@ -27,7 +27,7 @@ export const Base: FC = () => {
         <Header />
       </div>
 
-      <div className="pt-16">
+      <div className="pt-16 h-screen">
         <Outlet />
       </div>
     </div>

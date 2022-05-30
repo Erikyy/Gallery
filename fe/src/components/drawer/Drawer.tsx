@@ -15,7 +15,7 @@ export const Drawer: FC<DrawerProps> = ({ children, isOpen, drawerRef }) => {
   return (
     <aside
       ref={drawerRef}
-      className={`flex flex-col p-6 transform border-r border-r-slate-300 dark:border-r-slate-600 top-0 left-0 bg-slate-100 dark:bg-slate-800 dark:text-slate-100 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30
+      className={`flex flex-col p-6 transform border-r border-r-slate-300 dark:border-r-neutral-600 top-0 left-0 bg-slate-100 dark:bg-neutral-900 dark:text-slate-100 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-30
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}
     >

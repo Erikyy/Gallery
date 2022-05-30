@@ -21,7 +21,7 @@ export const ProfileHeader: FC = () => {
         onClick={() => {
           navigate('/profile');
         }}
-        className="inline object-cover w-12 h-12 mr-2 rounded-full active:bg-slate-900 cursor-pointer hover:border-2 hover:border-slate-400"
+        className="inline object-cover w-12 h-12 mr-2 rounded-full active:bg-neutral-900 cursor-pointer hover:border-2 hover:border-neutral-400"
         src={userProfile.avatar}
         alt="Profile image"
       />

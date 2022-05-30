@@ -25,7 +25,7 @@ export const PostItem: FC<PostItemProps> = ({
         e.preventDefault();
         onClick(post._id);
       }}
-      className="p-4 cursor-pointer rounded-md border-2 bg-slate-100 dark:bg-slate-600 dark:border-slate-600 dark:hover:border-slate-500 flex flex-col justify-center break-inside-avoid"
+      className="p-4 cursor-pointer rounded-md border-2 bg-neutral-100 dark:bg-neutral-700 dark:border-neutral-700 dark:hover:border-neutral-600 flex flex-col justify-center break-inside-avoid"
     >
       <div>
         <h1 className="dark:text-white">{post.title}</h1>
