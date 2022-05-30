@@ -11,6 +11,7 @@ import { RequireAuth, useQuery } from './utils/Api';
 import { setUser } from './features/user/UserSlice';
 import { useDispatch } from 'react-redux';
 import { NewPostPage } from './pages/NewPost';
+import { Settings } from './pages/Settings';
 const App: FC = () => {
   return (
     <div className="h-screen w-full">
@@ -22,6 +23,14 @@ const App: FC = () => {
             element={
               <RequireAuth>
                 <ProfilePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="settings"
+            element={
+              <RequireAuth>
+                <Settings />
               </RequireAuth>
             }
           />

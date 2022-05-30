@@ -51,7 +51,14 @@ export const SideDrawer: FC = () => {
           </DrawerItemGeneric>
           {auth.authenticated && (
             <>
-              <DrawerItem icon={<MdSettings size={24} />}>Settings</DrawerItem>
+              <DrawerItem
+                onClick={() => {
+                  navigate('/settings');
+                }}
+                icon={<MdSettings size={24} />}
+              >
+                Settings
+              </DrawerItem>
               <DrawerItem
                 onClick={() => {
                   logout(() => {
