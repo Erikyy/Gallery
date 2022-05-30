@@ -4,9 +4,15 @@ interface TextareaProps {
   label: string;
   id: string;
   error?: string;
+  defaultValue?: string;
 }
 
-export const Textarea: FC<TextareaProps> = ({ id, label, error }) => {
+export const Textarea: FC<TextareaProps> = ({
+  id,
+  label,
+  error,
+  defaultValue
+}) => {
   return (
     <div className="flex w-full mt-4">
       <div className="mb-3 w-full">
@@ -18,6 +24,7 @@ export const Textarea: FC<TextareaProps> = ({ id, label, error }) => {
         </label>
         <textarea
           id={id}
+          defaultValue={defaultValue}
           className="
           
         form-control

@@ -2,10 +2,11 @@ import React, { FC, useState } from 'react';
 
 interface FiledropProps {
   id: string;
+  defaultValue?: string;
 }
 
-export const FileDrop: FC<FiledropProps> = ({ id }) => {
-  const [img, setImg] = useState<string | undefined>(undefined);
+export const FileDrop: FC<FiledropProps> = ({ id, defaultValue }) => {
+  const [img, setImg] = useState<string | undefined>(defaultValue);
   return (
     <div className="border border-dashed border-gray-500 relative">
       <input

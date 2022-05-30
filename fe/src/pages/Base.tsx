@@ -18,7 +18,16 @@ export const Base: FC = () => {
 
   useEffect(() => {
     if (data) {
-      dispatch(setUser(data));
+      console.log(data);
+
+      dispatch(
+        setUser({
+          _id: data.id,
+          username: data.username,
+          email: data.email,
+          avatar: data.avatar
+        })
+      );
     }
   }, [data]);
   return (

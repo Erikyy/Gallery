@@ -1,10 +1,12 @@
 import React, { FC, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { MdThumbDown, MdThumbsUpDown, MdThumbUp } from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { IconButton } from '../components/IconButton';
 import { SocialButtons } from '../components/SocialButtons';
 import { Spinner } from '../components/Spinner';
+import { RootState } from '../features/store';
 import { Post } from '../models/Post';
 import { useAuth, useMutation, useQuery } from '../utils/Api';
 
@@ -14,6 +16,7 @@ export const PostPage: FC = () => {
   const [cookies] = useCookies(['access_token']);
   const { mutate } = useMutation(true, cookies.access_token);
   const auth = useAuth();
+  const userProfile = useSelector((state: RootState) => state.user.user);
   const { data, loading, error } = useQuery(
     `api/posts/${location.pathname.split('/')[1]}`,
     false,
@@ -24,6 +27,7 @@ export const PostPage: FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    console.log(userProfile);
   }, []);
   if (loading) {
     return (
@@ -52,14 +56,31 @@ export const PostPage: FC = () => {
               />
             </div>
           </div>
-          <button
-            onClick={() => {
-              navigate(-1);
-            }}
-            className="dark:text-white hover:bg-slate-500 p-3 rounded-lg"
-          >
-            Back
-          </button>
+          <div className="flex space-x-2">
+            {post.user._id === userProfile?._id && (
+              <div className="flex space-x-2">
+                <button className="dark:text-white bg-red-500 hover:bg-red-600 p-3 rounded-lg">
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    navigate(`/${location.pathname.split('/')[1]}/editpost`);
+                  }}
+                  className="dark:text-white hover:bg-neutral-500 p-3 rounded-lg"
+                >
+                  edit
+                </button>
+              </div>
+            )}
+            <button
+              onClick={() => {
+                navigate(-1);
+              }}
+              className="dark:text-white hover:bg-neutral-500 p-3 rounded-lg"
+            >
+              Back
+            </button>
+          </div>
         </div>
         <div className="w-full pt-2 flex justify-center">
           <img className="md:w-[512px] w-auto h-full" src={post.image} />

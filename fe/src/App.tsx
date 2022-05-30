@@ -12,6 +12,7 @@ import { setUser } from './features/user/UserSlice';
 import { useDispatch } from 'react-redux';
 import { NewPostPage } from './pages/NewPost';
 import { Settings } from './pages/Settings';
+import { EditPost } from './pages/EditPost';
 const App: FC = () => {
   return (
     <div className="h-screen w-full">
@@ -43,6 +44,14 @@ const App: FC = () => {
             }
           />
           <Route path=":postId" element={<PostPage />} />
+          <Route
+            path=":postId/editpost"
+            element={
+              <RequireAuth>
+                <EditPost />
+              </RequireAuth>
+            }
+          />
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />

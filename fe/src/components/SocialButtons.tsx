@@ -23,7 +23,7 @@ export const SocialButtons: FC<SocialButtonsProps> = ({
   const [hasLiked, setLiked] = useState(false);
 
   useEffect(() => {
-    const isInLikes = post.likes.includes(userProfile ? userProfile.id : '');
+    const isInLikes = post.likes.includes(userProfile ? userProfile._id : '');
     setLiked(isInLikes);
   }, [post.likes]);
   return (

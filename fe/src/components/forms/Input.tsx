@@ -5,8 +5,15 @@ interface InputProps {
   label: string;
   id: string;
   error?: string;
+  defaultValue?: string;
 }
-export const Input: FC<InputProps> = ({ type, label, id, error }) => {
+export const Input: FC<InputProps> = ({
+  type,
+  label,
+  id,
+  error,
+  defaultValue
+}) => {
   const [focused, setFocused] = useState(false);
   const inputRef = useRef<any>();
   return (
@@ -22,6 +29,7 @@ export const Input: FC<InputProps> = ({ type, label, id, error }) => {
         {label}
       </label>
       <input
+        defaultValue={defaultValue}
         ref={inputRef}
         onFocus={() => {
           setFocused(true);
