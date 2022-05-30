@@ -20,24 +20,27 @@ export const LoginForm: FC = () => {
       }
     );
   };
+
+  const ErrorMsg: FC = () => {
+    const err: any = error;
+    if (err && err.message) {
+      if (Array.isArray(err.message)) {
+        return err.message.map((msg: string) => {
+          return <p className="text-red-600">{msg}</p>;
+        });
+      } else {
+        return <p className="text-red-600">{err.message}</p>;
+      }
+    } else {
+      return null;
+    }
+  };
   return (
     <div className="p-4 mr-auto ml-auto border rounded-xl bg-slate-100 dark:bg-slate-700 border-slate-100 dark:border-slate-500 shadow-xl sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6">
       <form className="" onSubmit={handleSubmit}>
-        <Input
-          id="username"
-          label="Username"
-          type="text"
-          error={error && error.username && error.username[0]}
-        />
-        <Input
-          id="password"
-          label="Password"
-          type="password"
-          error={error && error.password && error.password[0]}
-        />
-        {error && error.detail && (
-          <span className="text-red-600">{error.detail}</span>
-        )}
+        <Input id="username" label="Username" type="text" />
+        <Input id="password" label="Password" type="password" />
+        <ErrorMsg />
         <div className="pt-4 w-full flex justify-between">
           <Button disabled={loading} type="submit">
             {loading ? <Spinner /> : 'Login'}

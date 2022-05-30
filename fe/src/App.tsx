@@ -12,20 +12,6 @@ import { setUser } from './features/user/UserSlice';
 import { useDispatch } from 'react-redux';
 import { NewPostPage } from './pages/NewPost';
 const App: FC = () => {
-  const [cookies] = useCookies(['access_token']);
-  const dispatch = useDispatch();
-
-  const { data, error, loading, fetchData } = useQuery(
-    'request/user',
-    true,
-    cookies.access_token
-  );
-
-  useEffect(() => {
-    if (data) {
-      dispatch(setUser(data));
-    }
-  }, [data]);
   return (
     <div className="h-screen w-full">
       <Routes>

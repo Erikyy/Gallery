@@ -20,6 +20,8 @@ export const PostPage: FC = () => {
     cookies.access_token
   );
   const post: Post = data;
+  console.log(post);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -31,7 +33,7 @@ export const PostPage: FC = () => {
     );
   }
   return (
-    <div className="w-full h-full flex justify-center">
+    <div className="w-full justify-center">
       <div className="w-full p-4 bg-slate-100 dark:bg-slate-600">
         <div className="w-full flex justify-between">
           <div>
@@ -39,6 +41,16 @@ export const PostPage: FC = () => {
             <p className="text-sm text-slate-500 dark:text-slate-300">
               Created At: {new Date(post.created_at).toLocaleDateString()}
             </p>
+            <div className="flex">
+              <div className="h-full flex flex-col justify-center pr-2">
+                <p className="dark:text-white">Author: {post.user.username}</p>
+              </div>
+              <img
+                className="inline object-cover w-6 h-6 mr-2 rounded-full"
+                src={post.user.avatar}
+                alt="Profile image"
+              />
+            </div>
           </div>
           <button
             onClick={() => {

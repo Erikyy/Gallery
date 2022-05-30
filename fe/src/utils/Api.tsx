@@ -64,7 +64,7 @@ export const useMutation = (
 ) => {
   const [data, setData] = useState<any>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<any>(undefined);
+  const [error, setError] = useState<undefined>(undefined);
 
   const mutate = async (
     data: any,
@@ -75,8 +75,6 @@ export const useMutation = (
       overrideMethod?: string;
     }
   ) => {
-    console.log(data);
-
     const authheaders = new Headers({
       Accept: 'application/json',
       Authorization: `Bearer ${token}`
@@ -94,24 +92,28 @@ export const useMutation = (
       body: multipart ? data : JSON.stringify(data)
     });
     res
-      .then(async (response) => {
-        if (response.ok) {
-          return response.json();
+      .then(async (response: Response) => {
+        const data = response.json();
+
+        if (!response.ok) {
+          throw new Error(JSON.stringify(await data));
         }
-        const data = await response.json();
-        if (!error) {
-          throw new Error(data as string);
+        if (response.ok) {
+          return data;
         }
       })
       .then((jsondata) => {
         setData(jsondata);
         setLoading(false);
+        console.log(jsondata);
+
         options.onSuccess(jsondata);
       })
       .catch((err) => {
         console.log(err);
-        options.onError(err);
-        setError(err);
+
+        setError(JSON.parse(err.message.split('Error: ')[0]));
+        options.onError(JSON.parse(err.message.split('Error: ')[0]));
         setLoading(false);
       });
   };

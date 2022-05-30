@@ -1,5 +1,7 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
+import { useSelector } from 'react-redux';
+import { RootState } from '../features/store';
 import { Post } from '../models/Post';
 import { IconButton } from './IconButton';
 
@@ -15,8 +17,14 @@ export const SocialButtons: FC<SocialButtonsProps> = ({
   authenticated
 }) => {
   const [numberOfLikes, setNumberOfLikes] = useState(post.likes.length);
+  const userProfile = useSelector((state: RootState) => state.user.user);
 
   const [hasLiked, setLiked] = useState(false);
+
+  useEffect(() => {
+    const isInLikes = post.likes.includes(userProfile ? userProfile.id : '');
+    setLiked(isInLikes);
+  }, [post.likes]);
   return (
     <div className="pt-2 flex space-x-2">
       <IconButton
