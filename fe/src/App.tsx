@@ -1,5 +1,4 @@
-import React, { FC, useEffect } from 'react';
-import { useCookies } from 'react-cookie';
+import React, { FC } from 'react';
 import { Route, Routes } from 'react-router';
 import { Base } from './pages/Base';
 import { HomePage } from './pages/Home';
@@ -7,18 +6,19 @@ import { LoginPage } from './pages/Login';
 import { PostPage } from './pages/Post';
 import { ProfilePage } from './pages/Profile';
 import { SignupPage } from './pages/Signup';
-import { RequireAuth, useQuery } from './utils/Api';
-import { setUser } from './features/user/UserSlice';
-import { useDispatch } from 'react-redux';
+import { RequireAuth } from './utils/Api';
 import { NewPostPage } from './pages/NewPost';
 import { Settings } from './pages/Settings';
 import { EditPost } from './pages/EditPost';
+import { AboutPage } from './pages/About';
+
 const App: FC = () => {
   return (
     <div className="h-screen w-full">
       <Routes>
         <Route path="/" element={<Base />}>
           <Route index element={<HomePage />} />
+          <Route path="about" element={<AboutPage />} />
           <Route
             path="profile"
             element={

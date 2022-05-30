@@ -20,7 +20,9 @@ export const Input: FC<InputProps> = ({
     <div className="flex flex-col">
       <label
         className={`bg-neutral-100 dark:bg-neutral-700 dark:text-gray-100 max-w-fit relative transition-all ease-in-out duration-150 ${
-          focused || (inputRef.current && inputRef.current.value !== '')
+          focused ||
+          defaultValue ||
+          (inputRef.current && inputRef.current.value !== '')
             ? 'top-3 left-3 text-sm '
             : 'top-10 left-3 text-sm'
         } p-2`}

@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import { MdHome, MdLogout, MdMenu, MdSettings } from 'react-icons/md';
+import { MdHome, MdInfo, MdLogout, MdMenu, MdSettings } from 'react-icons/md';
 import { useNavigate } from 'react-router';
 import { useAuth, useLogout } from '../../utils/Api';
 import { ThemeSwitch } from '../../utils/ThemeSwitch';
@@ -43,6 +43,14 @@ export const SideDrawer: FC = () => {
             icon={<MdHome size={24} />}
           >
             Home
+          </DrawerItem>
+          <DrawerItem
+            onClick={() => {
+              navigate('/about');
+            }}
+            icon={<MdInfo size={24} />}
+          >
+            About
           </DrawerItem>
         </div>
         <div className="flex-2">

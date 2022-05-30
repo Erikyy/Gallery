@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useSelector } from 'react-redux';
 import { Button } from '../components/Button';
@@ -8,6 +8,7 @@ import { useMutation } from '../utils/Api';
 
 export const ProfilePage: FC = () => {
   const [cookies] = useCookies(['access_token']);
+  const [err, setError] = useState('');
   const { mutate, data, error, loading } = useMutation(
     true,
     cookies.access_token,
@@ -21,28 +22,39 @@ export const ProfilePage: FC = () => {
     const username = e.target.elements.username.value;
     const email = e.target.elements.email.value;
     const password = e.target.elements.newPassword.value;
+    const confirmNewPassword = e.target.elements.confirmNewPassword.value;
 
     const formData = new FormData(e.currentTarget);
-    formData.append('file', file);
+    if (file) formData.append('file', file);
+
     formData.append('email', email);
     formData.append('username', username);
-    formData.append('password', password);
-    mutate(formData, {
-      path: 'api/profile',
-      onSuccess(res) {
-        window.location.reload();
-      },
-      onError(err) {},
-      overrideMethod: 'PATCH'
-    });
+
+    if (password !== '' && password === confirmNewPassword) {
+      setError('Passwords must match');
+    }
+    if (password !== '' && password === confirmNewPassword) {
+      formData.append('password', password);
+    }
+
+    if (err === '') {
+      mutate(formData, {
+        path: 'api/profile',
+        onSuccess(res) {
+          window.location.reload();
+        },
+        onError(err) {},
+        overrideMethod: 'PATCH'
+      });
+    }
   };
   if (!userProfile) {
     return null;
   }
 
   return (
-    <div className="p-8 mx-auto">
-      <form onSubmit={handleSubmit}>
+    <div className="p-8 w-full flex justify-center">
+      <form className="bg-neutral-700 p-8" onSubmit={handleSubmit}>
         <div className="flex">
           <img
             className="inline object-cover w-32 h-32 mr-2 rounded-full"
@@ -51,9 +63,19 @@ export const ProfilePage: FC = () => {
           />
           <input id="image" type="file" />
         </div>
-        <div className="max-w-sm">
-          <Input id="username" label="Username" type="text" />
-          <Input id="email" label="Email" type="email" />
+        <div className="">
+          <Input
+            defaultValue={userProfile.username}
+            id="username"
+            label="Username"
+            type="text"
+          />
+          <Input
+            defaultValue={userProfile.email}
+            id="email"
+            label="Email"
+            type="email"
+          />
           <Input id="newPassword" label="New Password" type="password" />
           <Input
             id="confirmNewPassword"
