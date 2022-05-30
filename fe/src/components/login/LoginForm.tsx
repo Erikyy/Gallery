@@ -21,7 +21,7 @@ export const LoginForm: FC = () => {
     );
   };
   return (
-    <div className="p-4 mr-auto ml-auto border rounded-xl bg-slate-100 border-slate-100 shadow-xl sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6">
+    <div className="p-4 mr-auto ml-auto border rounded-xl bg-slate-100 dark:bg-slate-700 border-slate-100 dark:border-slate-500 shadow-xl sm:w-2/3 md:w-3/6 lg:w-2/6 xl:w-2/6 2xl:w-2/6">
       <form className="" onSubmit={handleSubmit}>
         <Input
           id="username"
@@ -42,9 +42,12 @@ export const LoginForm: FC = () => {
           <Button disabled={loading} type="submit">
             {loading ? <Spinner /> : 'Login'}
           </Button>
-          <p>
+          <p className="dark:text-white">
             Not registered?{' '}
-            <Link className="text-blue-500 hover:underline" to="/signup">
+            <Link
+              className="text-blue-500 dark:text-blue-400 hover:underline"
+              to="/signup"
+            >
               Sign up here!
             </Link>
           </p>

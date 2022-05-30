@@ -13,7 +13,7 @@ export const HomePage: FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [cookies] = useCookies(['access_token']);
   const { data, loading, error, fetchData } = useQuery(
-    `api/posts?search=${searchQuery}&page=1&order_by=created_at&sort=desc`,
+    `api/posts`,
     false,
     cookies.access_token
   );
@@ -56,7 +56,7 @@ export const HomePage: FC = () => {
           return (
             <PostItem
               hasAuthenticated={auth.authenticated}
-              key={post.post_id}
+              key={post._id}
               onClick={(postId: string) => {
                 navigate(`/${postId}`);
               }}
@@ -65,23 +65,7 @@ export const HomePage: FC = () => {
                   mutate(
                     {},
                     {
-                      path: `api/posts/${post.post_id}?action=like`,
-                      onError(err) {
-                        console.log(err);
-                      },
-                      onSuccess(res) {
-                        console.log(res);
-                      }
-                    }
-                  );
-                }
-              }}
-              onDislikeClicked={() => {
-                if (auth.authenticated) {
-                  mutate(
-                    {},
-                    {
-                      path: `api/posts/${post.post_id}?action=dislike`,
+                      path: `api/posts/${post._id}`,
                       onError(err) {
                         console.log(err);
                       },

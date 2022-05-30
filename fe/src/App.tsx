@@ -7,27 +7,20 @@ import { LoginPage } from './pages/Login';
 import { PostPage } from './pages/Post';
 import { ProfilePage } from './pages/Profile';
 import { SignupPage } from './pages/Signup';
-import { RequireAuth, useQuery, useRefresh } from './utils/Api';
+import { RequireAuth, useQuery } from './utils/Api';
 import { setUser } from './features/user/UserSlice';
 import { useDispatch } from 'react-redux';
 import { NewPostPage } from './pages/NewPost';
 const App: FC = () => {
   const [cookies] = useCookies(['access_token']);
   const dispatch = useDispatch();
-  const { refresh } = useRefresh();
+
   const { data, error, loading, fetchData } = useQuery(
-    'api/users/me/',
+    'request/user',
     true,
     cookies.access_token
   );
 
-  useEffect(() => {
-    if (error) {
-      refresh(() => {
-        fetchData();
-      });
-    }
-  }, [error]);
   useEffect(() => {
     if (data) {
       dispatch(setUser(data));

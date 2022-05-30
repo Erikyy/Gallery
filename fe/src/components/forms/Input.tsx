@@ -29,7 +29,7 @@ export const Input: FC<InputProps> = ({ type, label, id, error }) => {
         onBlur={() => {
           setFocused(false);
         }}
-        className="rounded border border-slate-300 bg-slate-100 dark:bg-slate-700 transition-colors duration-150 ease-in-out"
+        className="rounded border border-slate-300 dark:border-slate-500 bg-slate-100 dark:bg-slate-700 dark:text-white transition-colors duration-150 ease-in-out"
         type={type}
         id={id}
       />

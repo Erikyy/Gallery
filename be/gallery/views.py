@@ -1,10 +1,12 @@
+from cmath import log
+from rest_framework.request import Request
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, JsonResponse
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from gallery.models import Post, Profile, User
-from gallery.serializers import PostSerializer, ProfileSerializer, UserSerializer
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from gallery.serializers import NewPostSerializer, PostSerializer, ProfileSerializer, UserSerializer
+from rest_framework.decorators import api_view, parser_classes, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from djoser.signals import user_registered
@@ -12,6 +14,7 @@ from django.dispatch import receiver
 from rest_framework.exceptions import NotAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from django.db.models import Q
+from rest_framework import generics
 
 @receiver(user_registered)
 def create_user_profile(user, request, **kwargs):
@@ -29,38 +32,46 @@ def has_permission(request):
         return False
 #posts
 @csrf_exempt
-@api_view(['GET', 'POST'])
-def posts(request):
+@api_view(['GET'])
+def posts(request: Request):
     if request.method == 'GET':
         posts = []
+        
         paginator = PageNumberPagination()
         paginator.page_size = 10
-        if (request.query_params['order_by'] is not None and request.query_params['sort'] is not None and request.query_params['search'] is not None):
+        print(request.query_params)
+        if 'order_by' in request.query_params and 'sort' in request.query_params is not None and 'search' in request.query_params is not None:
             search_q = request.query_params['search']
             if (request.query_params['sort'] == 'asc'):
                 posts = Post.objects.filter(Q(title__icontains=search_q) | Q(post_id__icontains=search_q)).order_by(request.query_params['order_by'])
             elif (request.query_params['sort'] == 'desc'):
                 posts = Post.objects.filter(Q(title__icontains=search_q) | Q(post_id__icontains=search_q)).order_by('-' + request.query_params['order_by'])
-        
-        result_page = paginator.paginate_queryset(posts, request)
-        serialized_posts = PostSerializer(result_page, many=True, context={"request": request})
-        return Response(serialized_posts.data)
-
-    if request.method == 'POST':
-        print(request.data)
-        
-        if has_permission(request):
-            user = User.objects.get(pk=request.user.id)
-            new_post = Post()
-            new_post.user = user
-            new_post.title = request.data['title']
-            new_post.description = request.data['description']
-            new_post.image = request.FILES.get('file')
-            new_post.save()
-            return Response()
+            result_page = paginator.paginate_queryset(posts, request)
+            serialized_posts = PostSerializer(result_page, many=True, context={"request": request})
+            return Response(serialized_posts.data)
         else:
-            return Response('Unauthorized')
+            return Response()
 
+class CreatePost(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = PostSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+    def create(self, request, *args, **kwargs):
+        f = open('request.txt', "w")
+        for key, value in request.data.items():
+            f.write(f"{key}, {value}")
+        
+        f.close()
+        return super().create(request, *args, **kwargs)
+
+    def perform_create(self, serializer: PostSerializer):
+        user = User.objects.get(pk=self.request.user.id)
+        print(user)
+        serializer.save(user=user)
+        
+            
+        
 #post by id
 @csrf_exempt
 @api_view(['GET', 'POST'])
@@ -70,7 +81,7 @@ def post(request, id):
         serialized_post = PostSerializer(post, context={"request": request})
         return Response(serialized_post.data)
     elif request.method == 'POST':
-        if (has_permission(request)):
+        if has_permission(request):
             if (request.query_params['action']):
                 post: Post = Post.objects.get(post_id=id)
                 user: User = User.objects.get(pk=request.user.id)

@@ -1,10 +1,15 @@
 import React, { FC, useState } from 'react';
 
-export const FileDrop: FC = () => {
+interface FiledropProps {
+  id: string;
+}
+
+export const FileDrop: FC<FiledropProps> = ({ id }) => {
   const [img, setImg] = useState<string | undefined>(undefined);
   return (
     <div className="border border-dashed border-gray-500 relative">
       <input
+        id={id}
         onChange={(e) => {
           if (e.target.files) {
             const url = URL.createObjectURL(e.target.files[0]);
@@ -19,7 +24,7 @@ export const FileDrop: FC = () => {
         {img ? (
           <img className=" max-h-96 mx-auto z-20 relative p-4" src={img} />
         ) : (
-          <div className="text-center p-10 relative top-0 right-0 left-0 m-auto">
+          <div className="text-center dark:text-white p-10 relative top-0 right-0 left-0 m-auto">
             <h4>
               Drop files anywhere to upload
               <br />

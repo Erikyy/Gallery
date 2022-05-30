@@ -1,14 +1,11 @@
 import { User } from './User';
 
 export type Post = {
+  _id: string;
   title: string;
   created_at: string;
-  post_image_url: string;
-  post_id: string;
+  image: string;
   description: string;
-  number_of_likes: number;
-  number_of_dislikes: number;
+  likes: User[];
   user: User;
-  has_liked: boolean;
-  has_disliked: boolean;
 };

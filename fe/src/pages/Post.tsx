@@ -50,10 +50,7 @@ export const PostPage: FC = () => {
           </button>
         </div>
         <div className="w-full pt-2 flex justify-center">
-          <img
-            className="md:w-[512px] w-auto h-max"
-            src={post.post_image_url}
-          />
+          <img className="md:w-[512px] w-auto h-max" src={post.image} />
         </div>
         <div className="pt-2 w-full">
           <p className="dark:text-white">{post.description}</p>
@@ -65,23 +62,7 @@ export const PostPage: FC = () => {
               mutate(
                 {},
                 {
-                  path: `api/posts/${post.post_id}?action=like`,
-                  onError(err) {
-                    console.log(err);
-                  },
-                  onSuccess(res) {
-                    console.log(res);
-                  }
-                }
-              );
-            }
-          }}
-          onDislikeClicked={() => {
-            if (auth.authenticated) {
-              mutate(
-                {},
-                {
-                  path: `api/posts/${post.post_id}?action=dislike`,
+                  path: `api/posts/${post._id}`,
                   onError(err) {
                     console.log(err);
                   },

@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate } from 'react-router';
 
-const api_url = 'http://localhost:8000';
+const api_url = 'http://localhost:9000';
 
 export const useQuery = (
   path: string,
@@ -57,7 +57,11 @@ export const useQuery = (
   return { data, loading, error, fetchData };
 };
 
-export const useMutation = (requireAuth: boolean, token?: string) => {
+export const useMutation = (
+  requireAuth: boolean,
+  token?: string,
+  multipart?: boolean
+) => {
   const [data, setData] = useState<any>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any>(undefined);
@@ -68,11 +72,13 @@ export const useMutation = (requireAuth: boolean, token?: string) => {
       path: string;
       onSuccess: (result: any) => void;
       onError: (err: any) => void;
+      overrideMethod?: string;
     }
   ) => {
+    console.log(data);
+
     const authheaders = new Headers({
       Accept: 'application/json',
-      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
     });
     const normalheaders = new Headers({
@@ -81,10 +87,11 @@ export const useMutation = (requireAuth: boolean, token?: string) => {
     });
     setLoading(true);
     setError(undefined);
+
     const res = fetch(`${api_url}/${options.path}`, {
-      method: 'post',
+      method: options.overrideMethod ? options.overrideMethod : 'post',
       headers: requireAuth ? authheaders : normalheaders,
-      body: JSON.stringify(data)
+      body: multipart ? data : JSON.stringify(data)
     });
     res
       .then(async (response) => {
@@ -92,7 +99,9 @@ export const useMutation = (requireAuth: boolean, token?: string) => {
           return response.json();
         }
         const data = await response.json();
-        throw new Error(JSON.stringify(data));
+        if (!error) {
+          throw new Error(data as string);
+        }
       })
       .then((jsondata) => {
         setData(jsondata);
@@ -100,9 +109,9 @@ export const useMutation = (requireAuth: boolean, token?: string) => {
         options.onSuccess(jsondata);
       })
       .catch((err) => {
-        console.log(JSON.parse(err.message));
-
-        setError(JSON.parse(err.message));
+        console.log(err);
+        options.onError(err);
+        setError(err);
         setLoading(false);
       });
   };
@@ -110,44 +119,8 @@ export const useMutation = (requireAuth: boolean, token?: string) => {
   return { mutate, data, loading, error };
 };
 
-export const useRefresh = () => {
-  const [cookies, setCookie, removeCookie] = useCookies([
-    'access_token',
-    'refresh_token'
-  ]);
-  const navigate = useNavigate();
-
-  const { mutate, error, data, loading } = useMutation(
-    true,
-    cookies.refresh_token
-  );
-
-  const refresh = (onSuccess: () => void) => {
-    mutate(
-      {
-        refresh: cookies.refresh_token
-      },
-      {
-        path: 'api/auth/jwt/refresh/',
-        onSuccess(res) {
-          setCookie('access_token', res.access);
-          onSuccess();
-        },
-        onError(err) {
-          navigate('/login');
-        }
-      }
-    );
-  };
-
-  return { refresh };
-};
-
 export const useLogin = () => {
-  const [cookies, setCookie, removeCookie] = useCookies([
-    'access_token',
-    'refresh_token'
-  ]);
+  const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
 
   const { mutate, data, error, loading } = useMutation(
     false,
@@ -157,16 +130,16 @@ export const useLogin = () => {
   const login = (username: string, password: string, onSuccess: () => void) => {
     mutate(
       {
-        username: username,
-        password: password
+        username,
+        password
       },
       {
-        path: 'api/auth/jwt/create/',
+        path: 'api/auth/login',
         onSuccess(result) {
-          setCookie('access_token', result.access);
-          setCookie('refresh_token', result.refresh);
+          setCookie('access_token', result.token);
           onSuccess();
         },
+
         onError(err) {
           console.log(err);
         }
@@ -183,7 +156,7 @@ export const useSignup = () => {
     onSuccess: () => void
   ) => {
     mutate(data, {
-      path: 'api/auth/users/',
+      path: 'api/auth/register',
       onSuccess() {
         onSuccess();
       },
@@ -196,36 +169,19 @@ export const useSignup = () => {
 };
 
 export const useLogout = () => {
-  const [cookies, setCookie, removeCookie] = useCookies([
-    'access_token',
-    'refresh_token'
-  ]);
-
-  const { mutate, data, error, loading } = useMutation(
-    true,
-    cookies.access_token
-  );
+  const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
 
   const logout = (onSuccess: () => void) => {
     removeCookie('access_token');
-    removeCookie('refresh_token');
     onSuccess();
   };
   return { logout };
 };
 
 export const useAuth = () => {
-  const [cookies, setCookie, removeCookie] = useCookies([
-    'access_token',
-    'refresh_token'
-  ]);
+  const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
 
-  if (
-    !cookies.access_token ||
-    !cookies.refresh_token ||
-    (cookies.access_token === 'undefined' &&
-      cookies.refresh_token === 'undefined')
-  ) {
+  if (!cookies.access_token || cookies.access_token === 'undefined') {
     return {
       authenticated: false
     };
@@ -236,16 +192,8 @@ export const useAuth = () => {
 
 export const RequireAuth: FC = ({ children }) => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies([
-    'access_token',
-    'refresh_token'
-  ]);
-  if (
-    !cookies.access_token ||
-    !cookies.refresh_token ||
-    (cookies.access_token === 'undefined' &&
-      cookies.refresh_token === 'undefined')
-  ) {
+  const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
+  if (!cookies.access_token || cookies.access_token === 'undefined') {
     navigate('/login');
   }
   return <>{children}</>;

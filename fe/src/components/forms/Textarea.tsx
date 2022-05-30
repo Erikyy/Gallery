@@ -33,6 +33,7 @@ export const Textarea: FC<TextareaProps> = ({ id, label, error }) => {
         dark:bg-slate-700
         bg-clip-padding
         border border-solid border-gray-300
+        dark:border-slate-500
         rounded
         transition
         duration-150

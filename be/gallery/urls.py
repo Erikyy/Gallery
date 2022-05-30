@@ -4,6 +4,7 @@ from django.conf import settings
 
 urlpatterns = [
     re_path(r'^posts$', views.posts),
+    path('posts/create/', views.CreatePost.as_view()),
     path('posts/<str:id>', views.post),
     path('users/', views.users),
     path('users/me/', views.me)

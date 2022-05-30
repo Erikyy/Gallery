@@ -11,9 +11,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'email', 'username']
 
+class NewPostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = ('title', 'description', 'post_image')
+
 class PostSerializer(serializers.ModelSerializer):
     user = UserSerializer()
-    post_image_url = serializers.SerializerMethodField()
+    #post_image_url = serializers.SerializerMethodField()
     number_of_likes = serializers.SerializerMethodField()
     number_of_dislikes = serializers.SerializerMethodField()
     has_liked = serializers.SerializerMethodField()
@@ -21,7 +26,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
        model = Post
-       fields = ['title', 'created_at', 'post_image_url', 'post_id', 'description', 'number_of_likes', 'number_of_dislikes', 'user', 'has_liked', 'has_disliked']
+       fields = ['title', 'created_at', 'post_image', 'post_id', 'description', 'number_of_likes', 'number_of_dislikes', 'user', 'has_liked', 'has_disliked']
 
     def get_post_image_url(self, post):
         request = self.context.get('request')

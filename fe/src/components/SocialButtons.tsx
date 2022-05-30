@@ -1,32 +1,22 @@
 import React, { FC, useState } from 'react';
-import {
-  MdThumbUp,
-  MdThumbDown,
-  MdFavoriteBorder,
-  MdFavorite
-} from 'react-icons/md';
+import { MdFavoriteBorder, MdFavorite } from 'react-icons/md';
 import { Post } from '../models/Post';
 import { IconButton } from './IconButton';
 
 interface SocialButtonsProps {
   onLikeClicked: () => void;
-  onDislikeClicked: () => void;
   post: Post;
   authenticated: boolean;
 }
 
 export const SocialButtons: FC<SocialButtonsProps> = ({
   onLikeClicked,
-  onDislikeClicked,
   post,
   authenticated
 }) => {
-  const [numberOfLikes, setNumberOfLikes] = useState(post.number_of_likes);
-  const [numberOfDislikes, setNumberOfDislikes] = useState(
-    post.number_of_dislikes
-  );
-  const [hasLiked, setLiked] = useState(post.has_liked);
-  const [hasDisliked, setDisliked] = useState(post.has_disliked);
+  const [numberOfLikes, setNumberOfLikes] = useState(post.likes.length);
+
+  const [hasLiked, setLiked] = useState(false);
   return (
     <div className="pt-2 flex space-x-2">
       <IconButton
@@ -34,10 +24,6 @@ export const SocialButtons: FC<SocialButtonsProps> = ({
           e.stopPropagation();
           if (authenticated) {
             onLikeClicked();
-            if (hasDisliked) {
-              setNumberOfDislikes(numberOfDislikes - 1);
-              setDisliked(false);
-            }
 
             if (hasLiked) {
               setNumberOfLikes(numberOfLikes - 1);
